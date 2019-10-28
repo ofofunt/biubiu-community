@@ -40,7 +40,7 @@ public class AuthorizeController {
         accessTokenDTO.setClient_secret(cilentSecret);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        if (githubUser != null) {
+        if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
             String token = (UUID.randomUUID().toString());
             user.setToken(token);
@@ -50,7 +50,7 @@ public class AuthorizeController {
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
             response.addCookie(new Cookie("token",token));
-
+            request.getSession().setAttribute("dui","sdf");
             // user不等于null意味着登陆成功
             // 登陆成功,写cookie和session
             return "redirect:/";

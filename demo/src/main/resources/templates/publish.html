@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -49,6 +50,42 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
+            <hr>
+            <form action="/publish" method="post">
+                <div class="form-group">
+                    <label for="title">问题标题 (简要):</label>
+                    <input type="text" class="form-control" id="title" th:value="${title}" name="title" placeholder="问题标题...">
+                </div>
+                <div class="form-group">
+                    <label for="title">问题补充（必填,请参考左边提示）:</label>
+                    <textarea name="description" id="description" th:text="${description}" class="form-control" cols="30" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="title">添加标签:</label>
+                    <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag" placeholder="输入标签,以逗号分隔...">
+                </div>
+                <div class="container-fluid main">
+                    <div class="row">
+                <div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error} !=null"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <button type="submit" class="btn btn-success btn-publish">提交问题</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3>问题发起指南:</h3>
+            ·问题标题:请用精简的语言描述您的问题,不超过25字<br>
+            ·问题补充:详细补充您的问题内容,并提供一些相关资料<br>
+            ·选择标签:选择一个或者多个合适的标签,用逗号隔开,每个标签不超过25字<br>
+        </div>
+    </div>
+</div>
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.slim.js"></script>
 <script src="/js/bootstrap.min.js"></script>
