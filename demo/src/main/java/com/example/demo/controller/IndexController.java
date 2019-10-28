@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
 import org.apache.catalina.filters.ExpiresFilter;
@@ -14,11 +15,14 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionMapper questionMapper;
 
     @GetMapping("/")
     public String index(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
+        if (cookies !=null && cookies.length != 0) {
+            for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")){
                 String token = cookie.getValue();
                 User user =userMapper.findByToken(token);
@@ -27,9 +31,8 @@ public class IndexController {
                 }
                 break;
             }
-
         }
-
+}
         return "index";
     }
 }
