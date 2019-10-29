@@ -55,15 +55,19 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
             <hr>
-            <div class="media">
+            <div class="media" th:each="questions:${questions}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object img-rounded" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572263052687&di=1a4e5bf55832a51d3af12e268e994f1b&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fforum%2Fw%3D580%2Fsign%3D92569614aa8b87d65042ab1737082860%2F69b39322720e0cf3f6806ade0146f21fbf09aa85.jpg">
+                        <img class="media-object img-rounded"
+                             th:src="${questions.user.avatarUrl}">
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">一个小栗子</h4>
-                    <span class="text-desc">2 个回复 · 31 次浏览 · 1 小时前</span>
+                    <h4 class="media-heading" th:text="${questions.title}"></h4>
+                    <span th:text="${questions.description}"> </span><br>
+                    <span class="text-desc"><span th:text="${questions.commentCount}"></span> 个回复 ·
+                        <span th:text="${questions.viewCount}"></span> 次浏览 · <span th:text="${#dates.format(questions.gmtCreate,'dd MMMM yyyy')}"></span>
+                    </span>
                 </div>
             </div>
         </div>
