@@ -15,10 +15,10 @@ public class PaginationDTO {
     private boolean showEndPage;
     private Integer currentPage;
     private List<Integer> pages = new ArrayList<>();
+    private Integer totalPage;
 
     public void setPagination(Integer totalCount, Integer page, Integer size) {
-        this.currentPage = page;
-        Integer totalPage;
+        PaginationDTO paginationDTO = new PaginationDTO();
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {
@@ -30,6 +30,7 @@ public class PaginationDTO {
         if(page > totalPage){
             page = totalPage;
         }
+        this.currentPage = page;
         pages.add(page);
         for (int i = 1; i <= 3; i++) {
             if ((page - i) > 0) {
