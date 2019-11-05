@@ -4,6 +4,7 @@ import com.example.demo.dto.PaginationDTO;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
 import com.example.demo.service.QuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,28 +16,19 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProfileController {
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private QuestionService questionService;
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action") String action,
                           Model model,
                           HttpServletRequest request,
-                          UserMapper userMapper,
                           @RequestParam(name = "page",defaultValue = "1") Integer page,
                           @RequestParam(name = "size",defaultValue = "2") Integer size) {
-        User user = null;
-        QuestionService questionService = new QuestionService();
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-            if (user == null){
+//        QuestionService questionService = new QuestionService();
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null){
                 return "redirect/";
             }
             if ("questions".equals(action)) {
@@ -47,8 +39,7 @@ public class ProfileController {
                 model.addAttribute("section", "replies");
                 model.addAttribute("sectionName", "最新回复");
             }
-            return "profile";
-        }
+
 
         PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
         model.addAttribute("pagination", paginationDTO);
