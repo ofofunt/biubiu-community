@@ -1,9 +1,11 @@
 package com.example.demo.controller;
+
 import com.example.demo.dto.AccessTokenDTO;
 import com.example.demo.dto.GithubUser;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
 import com.example.demo.provider.GithubProvider;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,8 +16,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
+
 @Controller
 public class AuthorizeController {
+    @Autowired
+    private UserService userService;
     @Autowired
     private GithubProvider githubProvider;
     @Value("${github.client.id}")
@@ -46,12 +51,9 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(user.getAvatarUrl());
-            userMapper.insert(user);
-            response.addCookie(new Cookie("token",token));
-            request.getSession().setAttribute("dui","sdf");
+            userService.createOrUpdate(user);
+            response.addCookie(new Cookie("token", token));
             // user不等于null意味着登陆成功
             // 登陆成功,写cookie和session
             return "redirect:/";
@@ -63,4 +65,13 @@ public class AuthorizeController {
 
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
+    }
 }
