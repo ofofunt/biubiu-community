@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.PaginationDTO;
 import com.example.demo.dto.QuestionDTO;
+import com.example.demo.exception.CustomizedErrorCode;
 import com.example.demo.exception.CustomizedException;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
@@ -113,7 +114,7 @@ public class QuestionService {
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
-            throw new CustomizedException("你找的问题不存在~");
+            throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
         }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
@@ -126,12 +127,12 @@ public class QuestionService {
         if (question.getId() == null) {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.insert(question);
+            questionMapper.insertSelective(question);
         } else {
             question.setGmtModified(question.getGmtCreate());
             int updated = questionMapper.updateByPrimaryKey(question);
             if (updated != 1) {
-                throw new CustomizedException("");
+                throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
             } else {
 
             }
