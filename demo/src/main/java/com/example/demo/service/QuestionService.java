@@ -4,6 +4,7 @@ import com.example.demo.dto.PaginationDTO;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.exception.CustomizedErrorCode;
 import com.example.demo.exception.CustomizedException;
+import com.example.demo.mapper.QuestionExtMapper;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Question;
@@ -11,6 +12,7 @@ import com.example.demo.model.QuestionExample;
 import com.example.demo.model.User;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.List;
  */
 @Service
 public class QuestionService {
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     private final QuestionMapper questionMapper;
 
@@ -137,5 +141,12 @@ public class QuestionService {
 
             }
         }
+    }
+
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }

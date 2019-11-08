@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.QuestionDTO;
-import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,8 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Integer id,
                            Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
+        // 添加累积评论数
+        questionService.incView(id);
         model.addAttribute("questions", questionDTO);
         return "question";
     }
