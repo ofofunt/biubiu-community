@@ -133,8 +133,14 @@ public class QuestionService {
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insertSelective(question);
         } else {
-            question.setGmtModified(question.getGmtCreate());
-            int updated = questionMapper.updateByPrimaryKey(question);
+            Question updateQuestion = new Question();
+            updateQuestion.setGmtModified(System.currentTimeMillis());
+            updateQuestion.setTag(question.getTag());
+            updateQuestion.setDescription(question.getDescription());
+            updateQuestion.setTitle(question.getTitle());
+            QuestionExample example = new QuestionExample();
+            example.createCriteria().andIdEqualTo(question.getId());
+            int updated = questionMapper.updateByExampleSelective(updateQuestion,example);
             if (updated != 1) {
                 throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
             } else {
