@@ -10,6 +10,7 @@ import com.example.demo.model.Comment;
 import com.example.demo.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -20,6 +21,7 @@ public class CommentService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
+    @Transactional
     public void insert(Comment comment) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizedException(CustomizedErrorCode.TARGET_PARAM__NOT_FOUND);
@@ -30,14 +32,14 @@ public class CommentService {
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             //回复评论
             Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
-            if (dbComment == null){
+            if (dbComment == null) {
                 throw new CustomizedException(CustomizedErrorCode.COMMENT_NOT_FOUND__WRONG);
             }
             commentMapper.insert(comment);
         } else {
             //回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
-            if(question == null){
+            if (question == null) {
                 throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND__WRONG);
             }
             commentMapper.insert(comment);
