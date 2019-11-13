@@ -7,7 +7,8 @@ public enum CustomizedErrorCode implements ICustomizedExceptionCode {
     SYS_ERROR(2004, "服务器忙,请稍后再试~"),
     TYPE_PARAM_WRONG(2005, "评论类型错误或不存在~"),
     COMMENT_NOT_FOUND__WRONG(2006, "你回复的评论不存在了~"),
-    QUESTION_NOT_FOUND__WRONG(2006, "你回复的问题不存在了~");
+    QUESTION_NOT_FOUND__WRONG(2007, "你回复的问题不存在了~"),
+    COMMENT_IS_EMPTY(2008, "输入内容不能为空~");
     private Integer code;
     private String message;
 
